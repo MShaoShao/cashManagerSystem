@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cash.manager.mapper.GoodsMapper">
+    <resultMap id="BaseResultMap" type="com.cash.manager.mapper.bean.GoodsDo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_type" jdbcType="INTEGER" property="orderType"/>
+        <result column="order_id" jdbcType="INTEGER" property="orderId"/>
+        <result column="work_name" jdbcType="VARCHAR" property="workName"/>
+        <result column="order_nums" jdbcType="DOUBLE" property="orderNums"/>
+        <result column="plate_length" jdbcType="DOUBLE" property="plateLength"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, order_id, work_name, order_nums, plate_length,order_type,create_time
+    </sql>
+<!--查询获取货物列表-->
+    <select id="getGoodList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods
+        WHERE
+        1=1
+        <if test="createTime != null">
+            AND create_time between from_unixtime(#{startTime}/1000) and from_unixtime(#{endTime}/1000)
+        </if>
+        <if test="workName != null">
+            AND work_name ~* #{workName}
+        </if>
+        <if test="orderId != null">
+            AND order_id = #{orderId}
+        </if>
+        <if test="orderType != null">
+            AND order_type = #{orderType}
+        </if>
+        ORDER BY
+        work_name desc,create_time desc
+    </select>
+    <!--    删除货物信息-->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM goods
+        WHERE order_Id = #{orderId,jdbcType=BIGINT}
+    </delete>
+    <!--保存货物订单-->
+    <insert id="insert" parameterType="com.cash.manager.mapper.bean.GoodsDo" useGeneratedKeys="true" keyProperty="id">
+        insert into goods
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderType != null">
+                order_type,
+            </if>
+            <if test="orderId != null">
+                order_Id,
+            </if>
+            <if test="orderNums != null">
+                order_nums,
+            </if>
+            <if test="plateLength != null">
+                plate_length,
+            </if>
+            <if test="workName != null">
+                work_name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderType != null">
+                #{orderType,jdbcType=INTEGER},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=INTEGER},
+            </if>
+            <if test="orderNums != null">
+                #{orderNums,jdbcType=DOUBLE},
+            </if>
+            <if test="plateLength != null">
+                #{plateLength,jdbcType=DOUBLE},
+            </if>
+            <if test="workName != null">
+                #{workName,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <!--    更新订单表-->
+    <update id="update" parameterType="com.cash.manager.mapper.bean.GoodsDo">
+        update goods
+        <set>
+            <if test="orderType != null">
+                order_type = #{orderType,jdbcType=INTEGER},
+            </if>
+            <if test="orderNums != null">
+                order_nums =  #{orderNums,jdbcType=DOUBLE},
+            </if>
+            <if test="plateLength != null">
+                plate_length =  #{plateLength,jdbcType=DOUBLE},
+            </if>
+            <if test="orderName != null">
+                order_name =  #{orderName,jdbcType=VARCHAR},
+            </if>
+            <if test="workName != null">
+                work_name =  #{workName,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where order_id = #{orderId,jdbcType=BIGINT}
+    </update>
+</mapper>

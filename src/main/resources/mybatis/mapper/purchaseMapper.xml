@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cash.manager.mapper.PurchaseMapper">
+    <resultMap id="BaseResultMap" type="com.cash.manager.mapper.bean.PurchaseDo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="exp_name" jdbcType="VARCHAR" property="expName"/>
+        <result column="exp_type" jdbcType="INTEGER" property="expType"/>
+        <result column="exp_nums" jdbcType="DOUBLE" property="expNums"/>
+        <result column="unit_money" jdbcType="DOUBLE" property="unitMoney"/>
+        <result column="sum_money" jdbcType="DOUBLE" property="sumMoney"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, exp_name, exp_type, exp_nums,unit_money, sum_money,create_time
+    </sql>
+
+    <select id="getPurchaseList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase
+        WHERE
+        1=1
+        <if test="createTime != null">
+            AND create_time between from_unixtime(#{startTime}/1000) and from_unixtime(#{endTime}/1000)
+        </if>
+        <if test="expName != null">
+            AND exp_name ~* #{expName}
+        </if>
+        <if test="expType != null">
+            AND exp_type ~* #{expType}
+        </if>
+        ORDER BY
+        is_finished desc,total_price desc,create_time desc
+    </select>
+    <!--    删除消费信息-->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM purchase
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+    <!--保存消费-->
+    <insert id="insert" parameterType="com.cash.manager.mapper.bean.PurchaseDo" useGeneratedKeys="true" keyProperty="id">
+        insert into purchase
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="expName != null">
+                exp_name,
+            </if>
+            <if test="expType != null">
+                exp_type,
+            </if>
+            <if test="expNums != null">
+                exp_nums,
+            </if>
+            <if test="unitMoney != null">
+                unit_money,
+            </if>
+            <if test="sumMoney != null">
+                sum_money,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="expName != null">
+                #{expName,jdbcType=VARCHAR},
+            </if>
+            <if test="expType != null">
+                #{expType,jdbcType=INTEGER},
+            </if>
+            <if test="expNums != null">
+                #{expNums,jdbcType=DOUBLE},
+            </if>
+            <if test="unitMoney != null">
+                #{unitMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="sumMoney != null">
+                #{sumMoney,jdbcType=DOUBLE},
+            </if>
+        </trim>
+    </insert>
+    <!--    更新消费表-->
+    <update id="update" parameterType="com.cash.manager.mapper.bean.PurchaseDo">
+        update purchase
+        <set>
+            <if test="expName != null">
+                exp_name = #{expName,jdbcType=VARCHAR},
+            </if>
+            <if test="expType != null">
+                exp_type = #{expType,jdbcType=INTEGER},
+            </if>
+            <if test="expNums != null">
+                exp_nums = #{expNums,jdbcType=DOUBLE},
+            </if>
+            <if test="unitMoney != null">
+                unit_money = #{unitMoney,jdbcType=DOUBLE},
+            </if>
+            <if test="sumMoney != null">
+                sum_money = #{sumMoney,jdbcType=DOUBLE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Table_Simple CSS for HTML tables</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+        html {
+            font-family: sans-serif;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 10px;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 800px;
+            margin-left: 600px;
+            margin-top: 300px;
+        }
+
+        td,th {
+            padding: 0;
+        }
+
+        .pure-table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            empty-cells: show;
+            border: 1px solid #cbcbcb;
+        }
+
+        .pure-table caption {
+            color: #000;
+            font: italic 85%/1 arial,sans-serif;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        .pure-table td,.pure-table th {
+            border-left: 1px solid #cbcbcb;
+            border-width: 0 0 0 1px;
+            font-size: inherit;
+            margin: 0;
+            overflow: visible;
+            padding: .5em 1em;
+        }
+
+        .pure-table thead {
+            background-color: #e0e0e0;
+            color: #000;
+            text-align: left;
+            vertical-align: bottom;
+        }
+
+        .pure-table td {
+            background-color: transparent;
+        }
+
+        .pure-table-odd td {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<table class="pure-table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Make</th>
+        <th>Model</th>
+        <th>Year</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr class="pure-table-odd">
+        <td>1</td>
+        <td>Honda</td>
+        <td>Accord</td>
+        <td>2009</td>
+    </tr>
+
+    <tr>
+        <td>2</td>
+        <td>Toyota</td>
+        <td>Camry</td>
+        <td>2012</td>
+    </tr>
+
+    <tr class="pure-table-odd">
+        <td>3</td>
+        <td>Hyundai</td>
+        <td>Elantra</td>
+        <td>2010</td>
+    </tr>
+
+    <tr>
+        <td>4</td>
+        <td>Ford</td>
+        <td>Focus</td>
+        <td>2008</td>
+    </tr>
+
+    <tr class="pure-table-odd">
+        <td>5</td>
+        <td>Nissan</td>
+        <td>Sentra</td>
+        <td>2011</td>
+    </tr>
+
+    <tr>
+        <td>6</td>
+        <td>BMW</td>
+        <td>M3</td>
+        <td>2009</td>
+    </tr>
+
+    <tr class="pure-table-odd">
+        <td>7</td>
+        <td>Honda</td>
+        <td>Civic</td>
+        <td>2010</td>
+    </tr>
+
+    <tr>
+        <td>8</td>
+        <td>Kia</td>
+        <td>Soul</td>
+        <td>2010</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

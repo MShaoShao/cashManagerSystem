@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Table_Simple CSS for HTML tables</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style type="text/css">
+        html {
+            font-family: sans-serif;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 10px;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-bottom: 800px;
+            margin-left: 600px;
+            margin-top: 300px;
+        }
+
+        td, th {
+            padding: 0;
+        }
+
+        .pure-table {
+            border-collapse: collapse;
+            border-spacing: 0;
+            empty-cells: show;
+            border: 1px solid #cbcbcb;
+        }
+
+        .pure-table caption {
+            color: #000;
+            font: italic 85%/1 arial, sans-serif;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        .pure-table td, .pure-table th {
+            border-left: 1px solid #cbcbcb;
+            border-width: 0 0 0 1px;
+            font-size: inherit;
+            margin: 0;
+            overflow: visible;
+            padding: .5em 1em;
+        }
+
+        .pure-table thead {
+            background-color: #e0e0e0;
+            color: #000;
+            text-align: left;
+            vertical-align: bottom;
+        }
+
+        .pure-table td {
+            background-color: transparent;
+        }
+
+        .pure-table-odd td {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<div class="button" id = "chose">
+    <button id="check_all">全选</button>
+    <button id="cancel">取消全选</button>
+    <button id="back">反选</button>
+    <button id="checkdelete">选择删除</button>
+</div>
+<div class="chose" id="checkBoxList">
+    <table class="pure-table" id="tb">
+        <thead id="hide_tbody">
+        <th>选择</th>
+        <th>订货人</th>
+        <th>售货人</th>
+        <th>订单类型</th>
+        <th>订单金额</th>
+        <th>是否结清</th>
+        <th>是否出完</th>
+        <th>订单创建时间</th>
+        </thead>
+    </table>
+</div>
+<tbody id="tbody">
+</tbody>
+</table>
+</body>
+<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="application/javascript">
+    $.ajax({
+        url: "/order/query", //引入地址
+        type: "get",           //请求方式
+        async: true,          //异步还是同步
+        cache: false,          //是否有缓存
+        success: function (data) {
+            console.log(data); //打印是否有数据
+            var html = "";
+            for (var i = 0; i < data.length; i++) {
+                // console.log(persons.name.length);
+                html +=
+                    " <tr>" +
+                    "<td><input type=\"checkbox\" name=\"check\" ></td>"
+                "<td>" +${data[i].orderName} +"</td>" +
+                "<td>" +${data[i].saleName} +"</td>" +
+                "<td>" +${data[i].orderType} +"</td>" +
+                "<td>" +${data[i].totalPrice} +"</td>" +
+                "<td>" +${data[i].isSettled} +"</td>" +
+                "<td>" +${data[i].isFinished} +"</td>" +
+                "<td>" +${data[i].createTime} +"</td>" +
+                "<td> <button class=\"add\">编辑</button> <button class=\"delete\">删除</button></td>" +
+                "</tr>";
+            }
+            $('#tbody').append(html);
+        }
+    })
+</script>
+</html>

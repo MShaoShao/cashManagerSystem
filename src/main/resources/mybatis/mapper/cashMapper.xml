@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.cash.manager.mapper.CashMapper">
+    <resultMap id="BaseResultMap" type="com.cash.manager.mapper.bean.OrderDo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="order_type" jdbcType="INTEGER" property="orderType"/>
+        <result column="unit_price" jdbcType="DOUBLE" property="unitPrice"/>
+        <result column="total_price" jdbcType="DOUBLE" property="totalPrice"/>
+        <result column="order_name" jdbcType="VARCHAR" property="orderName"/>
+        <result column="sale_name" jdbcType="VARCHAR" property="saleName"/>
+        <result column="is_settled" jdbcType="INTEGER" property="isSettled"/>
+        <result column="is_finished" jdbcType="INTEGER" property="isFinished"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, order_type, unit_price, total_price, order_name,sale_name,
+        is_settled, is_finished,create_time
+    </sql>
+
+    <select id="queryOrderId" resultType="int">
+        select id from orders
+        where order_type = #{type}
+        and order_name = #{orderName}
+        and create_time between date_format(now(),'%y-%m-%d') and #{time} order by create_time desc limit 1
+    </select>
+
+    <select id="getOrder" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from orders
+        WHERE id = #{id}
+    </select>
+
+    <select id="getOrderList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from orders
+        WHERE
+        1=1
+<!--        <if test="startTime != null">-->
+<!--            AND create_time between from_unixtime(#{startTime}/1000) and from_unixtime(#{endTime}/1000)-->
+<!--        </if>-->
+        <if test="orderName != null">
+            AND order_name ~* #{orderName}
+        </if>
+        <if test="saleName != null">
+            AND sale_name ~* #{saleName}
+        </if>
+        <if test="isFinished != null">
+            AND is_finished = #{isFinished}
+        </if>
+        <if test="isSettled != null">
+            AND is_settled = #{isSettled}
+        </if>
+        <if test="totalPrice != null">
+            AND total_price = #{totalPrice}
+        </if>
+        ORDER BY
+        is_finished desc,total_price desc,create_time desc
+    </select>
+<!--    删除订单信息-->
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM orders
+        WHERE id = #{id,jdbcType=BIGINT}
+    </delete>
+<!--保存订单-->
+    <insert id="insert" parameterType="com.cash.manager.mapper.bean.OrderDo" useGeneratedKeys="true" keyProperty="id">
+        insert into orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderType != null">
+                order_type,
+            </if>
+            <if test="unitPrice != null">
+                unit_price,
+            </if>
+            <if test="totalPrice != null">
+                total_price,
+            </if>
+            <if test="orderName != null">
+                order_name,
+            </if>
+            <if test="saleName != null">
+                sale_name,
+            </if>
+            <if test="isSettled != null">
+                is_settled,
+            </if>
+            <if test="isFinished != null">
+                is_finished,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="orderType != null">
+                #{orderType,jdbcType=INTEGER},
+            </if>
+            <if test="unitPrice != null">
+                #{unitPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="orderName != null">
+                 #{orderName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleName != null">
+                 #{saleName,jdbcType=VARCHAR},
+            </if>
+            <if test="isSettled != null">
+                #{isSettled,jdbcType=INTEGER},
+            </if>
+            <if test="isFinished != null">
+                #{isFinished,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+<!--    更新订单表-->
+    <update id="update" parameterType="com.cash.manager.mapper.bean.OrderDo">
+        update orders
+        <set>
+            <if test="orderType != null">
+               order_type = #{orderType,jdbcType=INTEGER},
+            </if>
+            <if test="unitPrice != null">
+                unit_price =  #{unitPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="totalPrice != null">
+                total_price =  #{totalPrice,jdbcType=DOUBLE},
+            </if>
+            <if test="orderName != null">
+                order_name =  #{orderName,jdbcType=VARCHAR},
+            </if>
+            <if test="saleName != null">
+                sale_name =  #{saleName,jdbcType=VARCHAR},
+            </if>
+            <if test="isSettled != null">
+                is_settled =  #{isSettled,jdbcType=INTEGER},
+            </if>
+            <if test="isFinished != null">
+                is_finished =  #{isFinished,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+</mapper>
