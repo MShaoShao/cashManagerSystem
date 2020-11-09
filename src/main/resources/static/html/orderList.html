@@ -1,124 +1,346 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <title>Table_Simple CSS for HTML tables</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <style type="text/css">
-        html {
-            font-family: sans-serif;
-            -ms-text-size-adjust: 100%;
-            -webkit-text-size-adjust: 100%;
-        }
-
-        body {
-            margin: 10px;
-        }
-
-        table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            margin-bottom: 800px;
-            margin-left: 600px;
-            margin-top: 300px;
-        }
-
-        td, th {
-            padding: 0;
-        }
-
-        .pure-table {
-            border-collapse: collapse;
-            border-spacing: 0;
-            empty-cells: show;
-            border: 1px solid #cbcbcb;
-        }
-
-        .pure-table caption {
-            color: #000;
-            font: italic 85%/1 arial, sans-serif;
-            padding: 1em 0;
-            text-align: center;
-        }
-
-        .pure-table td, .pure-table th {
-            border-left: 1px solid #cbcbcb;
-            border-width: 0 0 0 1px;
-            font-size: inherit;
-            margin: 0;
-            overflow: visible;
-            padding: .5em 1em;
-        }
-
-        .pure-table thead {
-            background-color: #e0e0e0;
-            color: #000;
-            text-align: left;
-            vertical-align: bottom;
-        }
-
-        .pure-table td {
-            background-color: transparent;
-        }
-
-        .pure-table-odd td {
-            background-color: #f2f2f2;
-        }
-    </style>
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
-<div class="button" id = "chose">
-    <button id="check_all">全选</button>
-    <button id="cancel">取消全选</button>
-    <button id="back">反选</button>
-    <button id="checkdelete">选择删除</button>
+<div class="demoTable">
+    订货人：
+    <div class="layui-inline">
+        <input class="layui-input" name="keyword" id="demoReload" autocomplete="off">
+    </div>
+    售货人：
+    <div class="layui-inline">
+        <input class="layui-input" name="keyword" id="saleReload" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">查询</button>
 </div>
-<div class="chose" id="checkBoxList">
-    <table class="pure-table" id="tb">
-        <thead id="hide_tbody">
-        <th>选择</th>
-        <th>订货人</th>
-        <th>售货人</th>
-        <th>订单类型</th>
-        <th>订单金额</th>
-        <th>是否结清</th>
-        <th>是否出完</th>
-        <th>订单创建时间</th>
-        </thead>
-    </table>
-</div>
-<tbody id="tbody">
-</tbody>
-</table>
-</body>
-<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="application/javascript">
-    $.ajax({
-        url: "/order/query", //引入地址
-        type: "get",           //请求方式
-        async: true,          //异步还是同步
-        cache: false,          //是否有缓存
-        success: function (data) {
-            console.log(data); //打印是否有数据
-            var html = "";
-            for (var i = 0; i < data.length; i++) {
-                // console.log(persons.name.length);
-                html +=
-                    " <tr>" +
-                    "<td><input type=\"checkbox\" name=\"check\" ></td>"
-                "<td>" +${data[i].orderName} +"</td>" +
-                "<td>" +${data[i].saleName} +"</td>" +
-                "<td>" +${data[i].orderType} +"</td>" +
-                "<td>" +${data[i].totalPrice} +"</td>" +
-                "<td>" +${data[i].isSettled} +"</td>" +
-                "<td>" +${data[i].isFinished} +"</td>" +
-                "<td>" +${data[i].createTime} +"</td>" +
-                "<td> <button class=\"add\">编辑</button> <button class=\"delete\">删除</button></td>" +
-                "</tr>";
-            }
-            $('#tbody').append(html);
-        }
-    })
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="getCheckData">批量删除</button>
+<!--        <button class="layui-btn layui-btn-sm" lay-event="getCheckLength">获取选中数目</button>-->
+        <button class="layui-btn layui-btn-sm" lay-event="isAll">添加</button>
+<!--        <button class="layui-btn layui-btn-sm" lay-event="isAll">批量删除</button>-->
+    </div>
 </script>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<script type="text/html" class="layui-hide" id="updateDemo" src="../html/update.html">
+</script>
+<script src="../layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
+
+<script type="text/javascript">
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '#test'
+            , url: '/order/query'
+            , method: 'POST'
+            , toolbar: '#toolbarDemo'
+            , contentType: 'application/json'
+            , id: 'testReload'
+            , request: {
+                pageName: 'pageNum' //页码的参数名称，默认：page
+                , limitName: 'pageSize' //每页数据量的参数名，默认：limit
+            }
+            , title: '财务记录表'
+            , totalRow: true
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', title: 'ID', width: 80, fixed: 'left', unresize: true, sort: true, totalRowText: '合计'}
+                , {field: 'orderName', title: '订货人', sort: true, width: 120, edit: 'text'}
+                , {field: 'saleName', title: '售货人', sort: true, width: 150, edit: 'text'}
+                , {
+                    field: 'orderType', title: '订单类型', width: 106, sort: true, templet: function (d) {
+                        if (d.orderType === "VENEER") {
+                            return "单板"
+                        } else if (d.orderType === "COMPOSITE_PLATE") {
+                            return "复合板"
+                        } else if (d.orderType === "ACCESSORIES") {
+                            return "墙板"
+                        } else if (d.orderType === "STEEL_TUBE") {
+                            return "附件"
+                        } else {
+                            return "其它"
+                        }
+                    }
+                }
+                , {field: 'totalPrice', title: '订单金额', width: 130, sort: true, totalRow: true, templet: function (d) {
+                        return d.totalPrice +"元"
+                    }}
+                , {
+                    field: 'isSettled', title: '是否结清', width: 100, sort: true, templet: function (d) {
+                        return d.isSettled === 0 ? "未结清" : "已结清"
+                    }
+                }
+                , {
+                    field: 'isFinished', title: '是否完成', width: 100,sort: true, templet: function (d) {
+                        return d.isFinished === 0 ? "未完成" : "已完成"
+                    }
+                }
+                , {
+                    field: 'createTime', title: '订单创建时间',sort: true, width: 200, templet: function (d) {
+                        return createTime(d.createTime);
+                    }
+                }
+                , {field: 'right', title: '操作', width: 150, toolbar: "#barDemo"}
+            ]]
+            , page: true
+            // , done:function(res,curr,count){ // 隐藏列
+            //     $(".layui-table-box").find("[data-field='id']").css("display","none");
+            // }
+        });
+
+        // 工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            var data = obj.data; //获得当前行数据
+            var layEvent = obj.event; //获得 lay-event 对应的值（也可以是表头的 event 参数对应的值）
+            var tr = obj.tr; //获得当前行 tr 的 DOM 对象（如果有的话）
+            switch (layEvent) {
+                case 'getCheckData':
+                    var array = checkStatus.data;
+                    var ids = {};
+                    var paramsList = [];
+                    for (var i=0;i<array.length;i++){
+                        paramsList.push(array[i].id);
+                    }
+                    ids={"ids":paramsList};
+                    $.ajax({
+                        type: "POST",//方法类型
+                        url: "/order/deleteByIds",
+                        dataType: "json",
+                        contentType: 'application/json;charset=UTF-8',
+                        data: JSON.stringify(ids),
+                        success: function (data) {
+                            //console.log(data);
+                            if (data !== "ok") {
+                                //执行重载
+                                table.reload('testReload', {
+                                });
+                            }
+                            else {
+                                layer.msg('删除失败')
+                            }
+                        }
+                    });
+                    // layer.alert(JSON.stringify(data));
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.open({
+                        type:2,
+                        area:['1000px','500px'],
+                        title: '添加订单'
+                        ,content: "../html/add1.html?"
+                        , shade: 0
+                        ,btn: ['关闭']
+                        ,btn2: function(index, layero){
+                            layer.close();
+                        }
+                    });
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function(obj){
+            var data = obj.data;
+            var id = data.id;
+            var ids = {"ids":[data.id]};
+            if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(data){
+                    //向服务端发送删除指令
+                    var txt="";
+                    try {
+                        $.ajax({
+                            type: "POST",//方法类型
+                            url: "/order/deleteByIds",
+                            dataType: "json",
+                            contentType: 'application/json;charset=UTF-8',
+                            data: JSON.stringify(ids),
+                            success: function (data) {
+                                // console.log(data);
+                                if (data !== "ok") {
+                                    //执行重载
+                                    table.reload('testReload', {
+                                    });
+                                }
+                                else {
+                                    layer.msg('删除失败')
+                                }
+                            }
+                        });
+                    }catch(err) {
+                        txt="本页有一个错误。\n\n";
+                        txt+="错误描述：" + err.message + "\n\n";
+                        txt+="点击确定继续。\n\n";
+                        alert(txt);
+                    }finally {
+                        window.location.href="../html/orderList.html";
+                    }
+
+                });
+            } else if(obj.event === 'edit'){
+                layer.open({
+                    type:2,
+                    area:['1000px','600px'],
+                    title: '编辑订单'
+                    ,content: "../html/update.html?id="+id
+                    , shade: 0
+                    ,anim: 3
+                    ,btn: ['确定', '关闭']
+                    ,yes: function(index,layero){
+                        //                获取弹出框的值
+                        var formObject = {};
+                        var bodys = layer.getChildFrame("body", index);
+                        var formArray = bodys.find(".layui-input,.lay-filter").serializeArray();
+                        //console.log(formArray);
+                        $(formArray).each(function (i, item) {
+                            if (formObject[item.name]) {
+                                var tmp = formObject[item.name];
+                                if (tmp instanceof Array) {
+                                    tmp.push(item.value);
+                                    formObject[item.name] = tmp;
+                                } else {
+                                    var arrayData = [];
+                                    arrayData.push(tmp);
+                                    arrayData.push(item.value);
+                                    formObject[item.name] = arrayData;
+                                }
+                            } else {
+                                if (item.name ==="plateLength" || item.name ==="orderNums"){
+                                    formObject[item.name] = [item.value];
+                                }else{
+                                    formObject[item.name] = item.value;
+                                }
+                            }
+                        })
+
+                        $.ajax({
+                            //几个参数需要注意一下
+                            type: "POST",//方法类型
+                            dataType: "json",//预期服务器返回的数据类型
+                            url: "/order/update",//url
+                            contentType: 'application/json;charset=UTF-8',
+                            data: JSON.stringify(formObject),
+                            traditional: true,
+                            success: function () {
+                                layer.close(index);
+                            },
+                            error: function () {
+                                alert("异常！");
+                            }
+                        });
+                    },
+                    cancel: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+        });
+
+        var $ = layui.$, active = {
+            reload: function () {
+                var demoReload = $('#demoReload');
+
+                //执行重载
+                table.reload('testReload', {
+                    where: {
+                        orderName: demoReload.val(),
+                        saleName: $('#saleReload').val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+    });
+</script>
+
+
+
+
+<!--long转换时间戳-->
+<script type="text/javascript">
+    function createTime(v) {
+        var date = new Date(v);
+        var y = date.getFullYear();
+        var m = date.getMonth() + 1;
+        m = m < 10 ? '0' + m : m;
+        var d = date.getDate();
+        d = d < 10 ? ("0" + d) : d;
+        var h = date.getHours();
+        h = h < 10 ? ("0" + h) : h;
+        var M = date.getMinutes();
+        M = M < 10 ? ("0" + M) : M;
+        var str = y + "-" + m + "-" + d + " " + h + ":" + M;
+        return str;
+    }
+
+    function save() {
+        var formObject = {};
+        var $ = layui.$;
+        var formArray = $("#form1").serializeArray();
+        console.log(formArray);
+        $(formArray).each(function (i, item) {
+            if (formObject[item.name]) {
+                var tmp = formObject[item.name];
+                if (tmp instanceof Array) {
+                    tmp.push(item.value);
+                    formObject[item.name] = tmp;
+                } else {
+                    var arrayData = [];
+                    arrayData.push(tmp);
+                    arrayData.push(item.value);
+                    formObject[item.name] = arrayData;
+                }
+            } else {
+                if (item.name ==="plateLength" || item.name ==="orderNums"){
+                    formObject[item.name] = [item.value];
+                }else{
+                    formObject[item.name] = item.value;
+                }
+            }
+        })
+        console.log(formObject);
+
+        $.ajax({
+            //几个参数需要注意一下
+            type: "POST",//方法类型
+            dataType: "json",//预期服务器返回的数据类型
+            url: "/order/add",//url
+            contentType: 'application/json;charset=UTF-8',
+            data: JSON.stringify(formObject),
+            traditional: true,
+            // success:function(){
+            //     // alert("添加成功");
+            //     window.location.href="../html/homePage1.html";
+            // },
+            error: function () {
+                alert("异常！");
+            }
+        });
+    }
+</script>
+</body>
 </html>

@@ -2,6 +2,8 @@ package com.cash.manager.mapper.bean;
 
 import lombok.Data;
 
+import java.sql.Timestamp;
+
 /**
  * 货物信息实体
  *
@@ -28,5 +30,5 @@ public class GoodsDo {
     /**
      * 货物完成时间
      */
-    private long createTime;
+    private Timestamp createTime;
 }

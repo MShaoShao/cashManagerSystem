@@ -3,13 +3,12 @@ package com.cash.manager.service.impl;
 import com.cash.manager.entity.Order;
 import com.cash.manager.mapper.CashMapper;
 import com.cash.manager.mapper.GoodsMapper;
-import com.cash.manager.mapper.bean.GoodsDo;
-import com.cash.manager.mapper.bean.OrderDo;
-import com.cash.manager.mapper.bean.OrderParam;
-import com.cash.manager.mapper.bean.OrderType;
+import com.cash.manager.mapper.bean.*;
 import com.cash.manager.service.CashService;
+import com.cash.manager.vo.OrderAndGoods;
 import com.cash.manager.vo.OrderVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -110,15 +109,26 @@ public class CashServiceImpl implements CashService {
         log.info("当前订单信息为：{}",record);
         //更新订单信息
         OrderDo orderDo = convertOrder(record);
-        cashMapper.update(orderDo);
-        //更新对应订单关联的货物信息
-        GoodsDo goodsDo = convertGoods(record);
+        orderDo.setId(record.getId());
+        //计算某一类型钢板的总价
+        double sum = 0d;
         List<Double> nums = record.getOrderNums();
         List<Double> lengths = record.getPlateLength();
         for (int i = 0; i < nums.size(); i++) {
+            sum += nums.get(i) * lengths.get(i) * record.getUnitPrice();
+        }
+        orderDo.setTotalPrice(sum);
+        //更新订单信息
+        cashMapper.update(orderDo);
+        //删除订单信息关联的获取信息
+        goodsMapper.deleteById(record.getId());
+        //重新插入更新后的订单关联的货物信息
+        GoodsDo goodsDo = convertGoods(record);
+        goodsDo.setOrderId(record.getId());
+        for (int i = 0; i < nums.size(); i++) {
             goodsDo.setOrderNums(nums.get(i));
             goodsDo.setPlateLength(lengths.get(i));
-            goodsMapper.update(goodsDo);
+            goodsMapper.insert(goodsDo);
         }
         //返回更新后的订单信息
         return convertOrders(cashMapper.getOrder(record.getId()));
@@ -129,6 +139,46 @@ public class CashServiceImpl implements CashService {
         int deleteNums = cashMapper.deleteById(id);
         int deleteGoodNums = goodsMapper.deleteById(id);
         return "删除订单的条数为："+deleteNums+"删除订单对应货物数量的条数为："+deleteGoodNums;
+    }
+
+    @Override
+    public OrderAndGoods getOrderById(Integer id) {
+       OrderDo orderDo =  cashMapper.getOrder(id);
+       List<GoodsDo> goodsDo = goodsMapper.getGoodsDo(id);
+       return convertOrdersAndGoods(orderDo,goodsDo);
+    }
+
+    /**
+     * 批量删除订单信息
+     *
+     * @param ids
+     * @return ding
+     */
+    @Override
+    public List<Long> deleteOrdersByIds(List<Long> ids) {
+        List<Long> disableDeleteIds = new ArrayList<>();
+        ids.forEach(id->{
+            int deleteNums = cashMapper.deleteById(id);
+            int deleteGoodNums = goodsMapper.deleteById(id);
+            if (deleteNums == 0 && deleteGoodNums ==0){
+                disableDeleteIds.add(id);
+            }
+        });
+        return disableDeleteIds;
+    }
+
+    /**
+     * 处理订单信息和订单id 对应的货物信息
+     * @param orderDo 订单信息
+     * @param goodsDo 货物信息
+     * @return 处理好的订单信息
+     */
+    private OrderAndGoods convertOrdersAndGoods(OrderDo orderDo, List<GoodsDo> goodsDo) {
+        OrderAndGoods orderAndGoods = new OrderAndGoods();
+        BeanUtils.copyProperties(orderDo,orderAndGoods,"goodsParams");
+        orderAndGoods.setOrderType(OrderType.getTypeName(orderDo.getOrderType()));
+        orderAndGoods.setGoodsParams(goodsDo);
+        return orderAndGoods;
     }
 
     /**

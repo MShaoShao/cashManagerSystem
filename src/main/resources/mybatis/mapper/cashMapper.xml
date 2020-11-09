@@ -43,10 +43,10 @@
 <!--            AND create_time between from_unixtime(#{startTime}/1000) and from_unixtime(#{endTime}/1000)-->
 <!--        </if>-->
         <if test="orderName != null">
-            AND order_name ~* #{orderName}
+            AND order_name like '%${orderName}%'
         </if>
         <if test="saleName != null">
-            AND sale_name ~* #{saleName}
+            AND sale_name like '%${saleName}%'
         </if>
         <if test="isFinished != null">
             AND is_finished = #{isFinished}
@@ -59,6 +59,8 @@
         </if>
         ORDER BY
         is_finished desc,total_price desc,create_time desc
+        limit #{pageNum},#{pageSize}
+
     </select>
 <!--    删除订单信息-->
     <delete id="deleteById" parameterType="java.lang.Long">

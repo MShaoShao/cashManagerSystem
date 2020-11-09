@@ -5,6 +5,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
     <title>login</title>
+    <script src="../css/layui.css"></script>
     <style type="text/css">
         * {
             margin: 0;
@@ -56,7 +57,7 @@
                 卖货人：<input name="saleName" type="text"/>
             </div>
             <div>
-                单价：<input name="unitPrice" type="text"/>
+                单价：<input name="unitPrice" type="number"/>
             </div>
             <div></div>
             是否结清：
@@ -73,7 +74,7 @@
             订单类型：
             <select name="orderType">
                 <option value="VENEER">单板</option>
-                <option value="COMPOSITE_PLATE">符合板</option>
+                <option value="COMPOSITE_PLATE">复合板</option>
                 <option value="ACCESSORIES">墙板</option>
                 <option value="STEEL_TUBE">附件</option>
                 <option value="OTHER">其它</option>
@@ -82,8 +83,9 @@
             <input onclick="deleteDiv()" type="button" value="删除">
             <div class="temp" id="temp" style="width: 1000px;alignment: center">
                 <div id="msg">
-                    钢板长度：<input name="plateLength" style="width: 25px" type="text"/> 米
-                    钢板数量：<input name="orderNums" style="width: 25px" type="text"/> 块
+                    钢板长度：<input name="plateLength" style="width: 35px" type="number"/> 米
+                    <input type="hidden">
+                    钢板数量：<input name="orderNums" style="width: 35px" type="number"/> 块
                 </div>
             </div>
             <input type="button" value="保存订单" onclick="save()">
@@ -93,7 +95,7 @@
     </div>
 </div>
 </body>
-<script  type="text/javascript">
+<script type="text/javascript">
     var detail_div = 1;
 
     function addDiv() {
@@ -149,6 +151,7 @@
             }
         })
         console.log(formObject);
+
         $.ajax({
             //几个参数需要注意一下
             type: "POST",//方法类型
@@ -161,6 +164,7 @@
                 alert("异常！");
             }
         });
+        window.location.href="homePage.html";
     }
 </script>
 </html>

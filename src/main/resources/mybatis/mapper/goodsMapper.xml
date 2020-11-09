@@ -37,6 +37,12 @@
         ORDER BY
         work_name desc,create_time desc
     </select>
+    <select id="getGoodsDo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from goods
+        WHERE order_id = #{id}
+    </select>
     <!--    删除货物信息-->
     <delete id="deleteById" parameterType="java.lang.Long">
         DELETE FROM goods

@@ -47,4 +47,12 @@ public class OrderParam {
      */
     private Long endTime;
 
+    /**
+     * 当前页
+     */
+    private Integer pageNum;
+    /**
+     * 当页大小
+     */
+    private Integer PageSize;
 }

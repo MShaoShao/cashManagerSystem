@@ -3,6 +3,7 @@ package com.cash.manager.service;
 import com.cash.manager.entity.Order;
 import com.cash.manager.mapper.bean.OrderDo;
 import com.cash.manager.mapper.bean.OrderParam;
+import com.cash.manager.vo.OrderAndGoods;
 import com.cash.manager.vo.OrderVo;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -49,4 +50,17 @@ public interface CashService {
      */
     String deleteOrders(long id);
 
+    /**
+     * 查询特定订单id对应的订单信息
+     * @param id
+     * @return
+     */
+    OrderAndGoods getOrderById(Integer id);
+
+    /**
+     * 批量删除订单信息
+     * @param ids 订单id
+     * @return 删除失败的id数组
+     */
+    List<Long> deleteOrdersByIds(List<Long> ids);
 }

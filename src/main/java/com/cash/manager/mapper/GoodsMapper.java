@@ -50,4 +50,13 @@ public interface GoodsMapper {
      * @return 更新后的货物信息
      */
     int update(GoodsDo record);
+
+
+    /**
+     * 根据订单id，查询货物信息
+     *
+     * @param id 订单id
+     * @return 查询到了对应货物信息
+     */
+    List<GoodsDo> getGoodsDo(@Param("id") int id);
 }

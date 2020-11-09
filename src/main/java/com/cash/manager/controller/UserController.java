@@ -84,7 +84,7 @@ public class UserController {
             User user = new User();
             user.setId(entity.getId());
             user.setName(entity.getName());
-            user.setName(entity.getPassword());
+            user.setPassword(entity.getPassword());
             user.setSex(entity.getSex());
             userList.add(entity);
         }
