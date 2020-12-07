@@ -1,18 +1,16 @@
-package com.cash.manager.mapper.bean;
+package com.cash.manager.controller.params;
 
 import com.cash.manager.mapper.bean.type.ExpType;
 import lombok.Data;
 
-import java.sql.Timestamp;
-
 /**
- * 花销信息实体
+ * 查询订单参数类
  *
  * @author MiaoShaoDong
- * @date 11:23 2020/9/18
+ * @date 14:48 2020/9/18
  */
 @Data
-public class PurchaseDo {
+public class PurchaseParam {
     /**
      * 消费id
      */
@@ -24,11 +22,15 @@ public class PurchaseDo {
     /**
      * 花销类型
      */
-    private Integer expType;
+    private ExpType expType;
     /**
-     * 吨数
+     * 开始时间
      */
-    private double expNums;
+    private Integer startTime;
+    /**
+     * 结束时间
+     */
+    private Integer endTime;
     /**
      * 花销描述
      */
@@ -37,8 +39,14 @@ public class PurchaseDo {
      * 花销总金额
      */
     private double sumMoney;
+
     /**
-     * 订单创建时间
+     * 当前页
      */
-    private Timestamp createTime;
+    private Integer pageNum;
+    /**
+     * 当页大小
+     */
+    private Integer PageSize;
+
 }

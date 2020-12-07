@@ -1,7 +1,6 @@
 package com.cash.manager.vo;
 
-import com.cash.manager.mapper.bean.OrderType;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.cash.manager.mapper.bean.type.OrderType;
 import lombok.Data;
 
 import java.util.List;

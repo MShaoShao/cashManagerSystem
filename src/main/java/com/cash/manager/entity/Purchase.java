@@ -1,4 +1,4 @@
-package com.cash.manager.mapper.bean;
+package com.cash.manager.entity;
 
 import com.cash.manager.mapper.bean.type.ExpType;
 import lombok.Data;
@@ -6,13 +6,11 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 /**
- * 花销信息实体
- *
  * @author MiaoShaoDong
- * @date 11:23 2020/9/18
+ * @date 15:01 2020/11/20
  */
 @Data
-public class PurchaseDo {
+public class Purchase {
     /**
      * 消费id
      */
@@ -24,7 +22,7 @@ public class PurchaseDo {
     /**
      * 花销类型
      */
-    private Integer expType;
+    private ExpType expType;
     /**
      * 吨数
      */

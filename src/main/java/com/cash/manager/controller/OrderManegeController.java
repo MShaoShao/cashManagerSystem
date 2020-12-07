@@ -1,8 +1,9 @@
 package com.cash.manager.controller;
 
+import com.cash.manager.controller.params.DeleteParams;
 import com.cash.manager.entity.ApiResult;
 import com.cash.manager.entity.Order;
-import com.cash.manager.mapper.bean.OrderParam;
+import com.cash.manager.controller.params.OrderParam;
 import com.cash.manager.service.CashService;
 import com.cash.manager.vo.OrderAndGoods;
 import com.cash.manager.vo.OrderVo;

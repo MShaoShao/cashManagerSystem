@@ -1,14 +1,11 @@
 package com.cash.manager.mapper;
 
-import com.cash.manager.entity.Order;
 import com.cash.manager.mapper.bean.OrderDo;
-import com.cash.manager.mapper.bean.OrderParam;
+import com.cash.manager.controller.params.OrderParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestBody;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 /**

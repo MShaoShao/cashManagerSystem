@@ -1,8 +1,7 @@
 package com.cash.manager.vo;
 
 import com.cash.manager.mapper.bean.GoodsDo;
-import com.cash.manager.mapper.bean.GoodsParam;
-import com.cash.manager.mapper.bean.OrderType;
+import com.cash.manager.mapper.bean.type.OrderType;
 import lombok.Data;
 
 import java.sql.Timestamp;

@@ -1,9 +1,7 @@
 package com.cash.manager.mapper;
 
 import com.cash.manager.mapper.bean.GoodsDo;
-import com.cash.manager.mapper.bean.GoodsParam;
-import com.cash.manager.mapper.bean.OrderDo;
-import com.cash.manager.mapper.bean.OrderParam;
+import com.cash.manager.controller.params.GoodsParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;

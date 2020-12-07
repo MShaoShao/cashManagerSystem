@@ -1,37 +1,56 @@
 package com.cash.manager.service;
 
-import com.cash.manager.entity.User;
+import com.cash.manager.controller.params.PurchaseParam;
+import com.cash.manager.entity.Order;
+import com.cash.manager.entity.Purchase;
+import com.cash.manager.controller.params.OrderParam;
+import com.cash.manager.vo.OrderAndGoods;
+import com.cash.manager.vo.OrderVo;
 
 import java.util.List;
 
 /**
- * 用户信息实现接口
+ * 花销信息实现接口
  *
  * @author MiaoShaoDong
  * @date 14:23 2020/9/17
  */
 public interface PurchaseService {
     /**
-     * 获取用户列表
+     * 根据查询条件获取花销信息列表
      *
-     * @return 用户列表
+     * @param param 查询条件
+     * @return 花销信息列表
      */
-    List<User> getUserList();
+    List<Purchase> getPurchaseList(PurchaseParam param);
 
     /**
-     * 根据用户名获取用户信息
+     * 保存花销信息
      *
-     * @param name 用户名
-     * @return 对应的用户信息
+     * @param record 花销信息
+     * @return 保存成功的花销信息
      */
-    User getUserByName(String name);
+    Purchase savePurchases(PurchaseParam record);
 
     /**
-     * 获取登录用户实体类
+     * 更新花销信息
      *
-     * @param name     用户名
-     * @param password 密码
-     * @return 对应的登录用户实体类
+     * @param record 花销信息
+     * @return 更新后的花销信息
      */
-    User loginPage(String name, String password);
+    Purchase updatePurchases(PurchaseParam record);
+
+    /**
+     * 查询特定花销id对应的花销信息
+     * @param id
+     * @return
+     */
+    Purchase getPurchaseById(Integer id);
+
+    /**
+     * 批量删除花销信息
+     * @param ids 花销id
+     * @return 删除失败的id数组
+     */
+    List<Long> deletePurchasesByIds(List<Long> ids);
 }

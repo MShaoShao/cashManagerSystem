@@ -1,9 +1,8 @@
 package com.cash.manager.mapper;
 
-import com.cash.manager.mapper.bean.GoodsDo;
-import com.cash.manager.mapper.bean.GoodsParam;
+import com.cash.manager.controller.params.QueryListParams;
 import com.cash.manager.mapper.bean.PurchaseDo;
-import com.cash.manager.mapper.bean.PurchaseParam;
+import com.cash.manager.controller.params.PurchaseParam;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -22,10 +21,10 @@ public interface PurchaseMapper {
     /**
      * 查询花销列表
      *
-     * @param param 查询花销参数
+     * @param params 查询条件
      * @return 查询相应条件的花销列表
      */
-    List<PurchaseDo> getPurchaseList(PurchaseParam param);
+    List<PurchaseDo> getPurchaseList(QueryListParams params);
 
     /**
      * 根据花销id，删除花销
@@ -50,4 +49,17 @@ public interface PurchaseMapper {
      * @return 更新后的花销信息
      */
     int update(PurchaseDo record);
+
+
+    /**
+     * 根据花销id，查询花销信息
+     * @param id 花销id
+     * @return 对应花销信息
+     */
+    PurchaseDo getPurchaseById(int id);
+
+    /**
+     * 获取新创建花销对象的id
+     */
+    int getId();
 }

@@ -8,31 +8,38 @@
         <result column="exp_name" jdbcType="VARCHAR" property="expName"/>
         <result column="exp_type" jdbcType="INTEGER" property="expType"/>
         <result column="exp_nums" jdbcType="DOUBLE" property="expNums"/>
-        <result column="unit_money" jdbcType="DOUBLE" property="unitMoney"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
         <result column="sum_money" jdbcType="DOUBLE" property="sumMoney"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, exp_name, exp_type, exp_nums,unit_money, sum_money,create_time
+        id, exp_name, exp_type, exp_nums,description, sum_money,create_time
     </sql>
+    
 
+    
     <select id="getPurchaseList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from purchase
         WHERE
         1=1
-        <if test="createTime != null">
-            AND create_time between from_unixtime(#{startTime}/1000) and from_unixtime(#{endTime}/1000)
-        </if>
         <if test="expName != null">
-            AND exp_name ~* #{expName}
+            AND exp_name like '%${expName}%'
         </if>
         <if test="expType != null">
-            AND exp_type ~* #{expType}
+            AND exp_type = #{expType}
         </if>
-        ORDER BY
-        is_finished desc,total_price desc,create_time desc
+        ORDER BY create_time desc
+    </select>
+    <select id="getPurchaseById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from purchase
+        where id = #{id}
+    </select>
+    <select id="getId" resultType="java.lang.Integer">
+        select Max(id) from purchase
     </select>
     <!--    删除消费信息-->
     <delete id="deleteById" parameterType="java.lang.Long">
@@ -52,8 +59,8 @@
             <if test="expNums != null">
                 exp_nums,
             </if>
-            <if test="unitMoney != null">
-                unit_money,
+            <if test="description != null">
+                description,
             </if>
             <if test="sumMoney != null">
                 sum_money,
@@ -69,8 +76,8 @@
             <if test="expNums != null">
                 #{expNums,jdbcType=DOUBLE},
             </if>
-            <if test="unitMoney != null">
-                #{unitMoney,jdbcType=DOUBLE},
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
             </if>
             <if test="sumMoney != null">
                 #{sumMoney,jdbcType=DOUBLE},
@@ -90,8 +97,8 @@
             <if test="expNums != null">
                 exp_nums = #{expNums,jdbcType=DOUBLE},
             </if>
-            <if test="unitMoney != null">
-                unit_money = #{unitMoney,jdbcType=DOUBLE},
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
             </if>
             <if test="sumMoney != null">
                 sum_money = #{sumMoney,jdbcType=DOUBLE},

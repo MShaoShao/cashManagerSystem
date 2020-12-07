@@ -45,3 +45,5 @@ CREATE TABLE `orders` (
  `create_time` TIMESTAMP  NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+
+alter table purchase change unit_money description varchar(1000);

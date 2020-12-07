@@ -3,7 +3,6 @@ package com.cash.manager.service.impl;
 import com.cash.manager.entity.User;
 import com.cash.manager.mapper.UserMapper;
 import com.cash.manager.service.GoodsService;
-import com.cash.manager.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -15,21 +14,37 @@ import java.util.List;
  */
 @Service(value = "GoodsService")
 public class GoodsServiceImpl implements GoodsService {
-    @Resource
-    private UserMapper userMapper;
 
+    /**
+     * 获取用户列表
+     *
+     * @return 用户列表
+     */
     @Override
     public List<User> getUserList() {
-        return userMapper.getUserList();
+        return null;
     }
 
+    /**
+     * 根据用户名获取用户信息
+     *
+     * @param name 用户名
+     * @return 对应的用户信息
+     */
     @Override
     public User getUserByName(String name) {
-        return userMapper.getUserByName(name);
+        return null;
     }
 
+    /**
+     * 获取登录用户实体类
+     *
+     * @param name     用户名
+     * @param password 密码
+     * @return 对应的登录用户实体类
+     */
     @Override
     public User loginPage(String name, String password) {
-        return userMapper.loginPage(name,password);
+        return null;
     }
 }

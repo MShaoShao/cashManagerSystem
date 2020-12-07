@@ -1,13 +1,22 @@
 package com.cash.manager.controller;
 
+import com.cash.manager.controller.params.DeleteParams;
+import com.cash.manager.controller.params.PurchaseParam;
+import com.cash.manager.controller.params.UserParams;
+import com.cash.manager.entity.ApiResult;
+import com.cash.manager.entity.Purchase;
 import com.cash.manager.entity.User;
+import com.cash.manager.mapper.bean.type.UserDo;
 import com.cash.manager.service.UserService;
 import com.cash.manager.utill.Json;
 import com.cash.manager.utill.Tool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -59,36 +68,16 @@ public class UserController {
         ModelAndView modelAndView = new ModelAndView();
         String userName = request.getParameter(USER_NAME);
         String password = request.getParameter(PASS_WORD);
-        User userDo = userService.loginPage(userName, password);
+        UserDo userDo = userService.loginPage(userName, password);
         log.info("userDo is: {}", userDo);
         if (isEmpty(userDo)) {
             modelAndView.clear();
             modelAndView.setViewName("login");
             return modelAndView;
         }
-        session.setAttribute("tname", userDo.getName());
-        log.info("name is: {}", userDo.getName());
+        session.setAttribute("tname", userDo.getUserName());
+        log.info("userName is: {}", userDo.getUserName());
         modelAndView.setViewName("homePage");
         return modelAndView;
-    }
-
-    @RequestMapping("/getUserList")
-    private void getUserList(HttpServletResponse response)throws Exception{
-        List<User> users =  userService.getUserList();
-        if(users.isEmpty()){
-            Json.toJson(new Tool(false,7000,"没有数据",null),response);
-            return;
-        }
-        List<User> userList = new ArrayList<User>();
-        for (User entity : users) {
-            User user = new User();
-            user.setId(entity.getId());
-            user.setName(entity.getName());
-            user.setPassword(entity.getPassword());
-            user.setSex(entity.getSex());
-            userList.add(entity);
-        }
-        Tool result = new Tool(true,200,"成功",userList);
-        Json.toJson(result,response);
     }
 }

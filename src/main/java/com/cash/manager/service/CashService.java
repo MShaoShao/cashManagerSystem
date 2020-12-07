@@ -1,11 +1,9 @@
 package com.cash.manager.service;
 
 import com.cash.manager.entity.Order;
-import com.cash.manager.mapper.bean.OrderDo;
-import com.cash.manager.mapper.bean.OrderParam;
+import com.cash.manager.controller.params.OrderParam;
 import com.cash.manager.vo.OrderAndGoods;
 import com.cash.manager.vo.OrderVo;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
