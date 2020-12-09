@@ -97,6 +97,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     private PurchaseDo convertPurchase(PurchaseParam purchaseParam) {
         PurchaseDo purchaseDo = new PurchaseDo();
         BeanUtils.copyProperties(purchaseParam, purchaseDo);
+        purchaseDo.setExpType(purchaseParam.getExpType().getTypeId());
         return purchaseDo;
     }
 

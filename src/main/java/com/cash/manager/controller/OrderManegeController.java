@@ -79,7 +79,7 @@ public class OrderManegeController {
      */
     @RequestMapping("/query")
     private ApiResult queryOrder(@RequestBody OrderParam queryParam) {
-        queryParam.setPageNum((queryParam.getPageNum() - 1) * queryParam.getPageSize());
+//        queryParam.setPageNum((queryParam.getPageNum() - 1) * queryParam.getPageSize());
         return ApiResult.ok(cashService.getOrderList(queryParam));
     }
 

@@ -19,7 +19,7 @@
     <div class="layui-inline">
         <!--<input class="layui-input" name="keyword" id="saleReload" autocomplete="on">-->
         <select name='keyword' lay-verify='required' id="saleReload" lay-search='' lay-filter='type'>
-            <option value="">所有类型</option>
+            <option value="ALL">所有类型</option>
             <option value="STEEL_VENEER">购钢板</option>
             <option value="STEEL_TUBE">购方管</option>
             <option value="FOAM">购泡沫</option>
@@ -252,17 +252,28 @@
             reload: function () {
                 var demoReload = $('#demoReload').val();
                 var saleReload = $('#saleReload').val();
-                var expType;
-                if(saleReload!= null&&saleReload!== ""){
-                    expType = saleReload;
+
+                var expType = saleReload;
+                console.log(expType);
+                console.log(expType !== "ALL");
+                if( expType!== "ALL"){
+                    //执行重载
+                    table.reload('testReload', {
+                        where: {
+                            expName: demoReload,
+                            expType: expType
+                        }
+                    });
+                }else{
+                    //执行重载
+                    table.reload('testReload', {
+                        where: {
+                            expName: demoReload,
+                            expType: null
+                        }
+                    });
                 }
-                //执行重载
-                table.reload('testReload', {
-                    where: {
-                        expName: demoReload,
-                        expType: expType
-                    }
-                });
+
             }
         };
 
